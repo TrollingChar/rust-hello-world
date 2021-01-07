@@ -9,7 +9,7 @@ impl<R: 'static> Object<R> {
         Self {
             fns,
             state: Mid::boxed(MidFns {
-                nop: || Box::new(move |o| (o.fns.nop)())
+                nop: move || Box::new(move |o| (o.fns.nop)())
             }),
         }
     }
