@@ -4,11 +4,11 @@ pub struct Object<R> {
 }
 
 
-// почему R должно быть 'static?
-impl<R: 'static> Object<R> {
+impl<R> Object<R> {
     pub fn new(fns: Fns<R>) -> Self {
         Self {
             fns,
+            // пишет что low::Object<...> не удовлетворяет каким-то критериям
             state: Low::boxed(LowFns {
                 nop: move || Box::new(move |o| (o.fns.nop)())
             }),
