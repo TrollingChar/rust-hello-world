@@ -1,14 +1,13 @@
-pub struct Object<R> {
+pub struct Object<'a, R> {
     fns: Fns<R>,
-    state: Box<dyn State<R>>,
+    state: Box<dyn State<R> + 'a>,
 }
 
 
-impl<R> Object<R> {
+impl<'a, R: 'a> Object<'a, R> {
     pub fn new(fns: Fns<R>) -> Self {
         Self {
             fns,
-            // пишет что low::Object<...> не удовлетворяет каким-то критериям
             state: Low::boxed(LowFns {
                 nop: move || Box::new(move |o| (o.fns.nop)())
             }),
@@ -17,7 +16,7 @@ impl<R> Object<R> {
     pub fn boxed(fns: Fns<R>) -> Box<Self> {
         Box::new(Self::new(fns))
     }
-    pub fn update(&mut self) -> R {
+    pub fn update(&mut self) -> R { // R = &'a i32
         let f = self.state.update();
         f(self)
     }

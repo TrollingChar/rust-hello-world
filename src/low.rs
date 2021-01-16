@@ -1,3 +1,4 @@
+// R: 'a => Object<R>: 'a
 pub struct Object<R> {
     fns: Fns<R>,
 }
